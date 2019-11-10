@@ -1,0 +1,55 @@
+# turtlebot with raspi camera
+export TURTLEBOT3_MODEL=waffle_pi
+
+# run gazebo
+roslaunch turtlebot3_gazebo turtlebot3_world.launch
+
+
+### new terminal(ctrl+alt+t) ###
+
+# turtlebot with raspi camera
+export TURTLEBOT3_MODEL=waffle_pi
+
+# run rviz
+roslaunch turtlebot3_gazebo turtlebot3_gazebo_rviz.launch
+
+
+### new terminal ###
+
+# check camera topic '/camera/rgb/image_raw'
+rostopic list
+
+# setting
+cd ~/catkin_ws
+catkin_make
+source devel/setup.bash
+
+# permission
+roscd beginner_tutorials
+chmod a+x scripts/image_converter.py
+
+# run image_converter.py, ***attention: #!/bin/env python *** not 3
+rosrun beginner_tutorials image_converter.py input:=/camera/rgb/image_raw output:=/test
+
+
+### new terminal ###
+
+# check image_converter's node '/image_converter_*****'
+rosnode list
+
+# check converted image
+rosrun image_view image_view image:=/test
+
+
+### new terminal ###
+
+# check original image
+rosrun image_view image_view image:=/camera/rgb/image_raw
+
+
+### new terminal ###
+
+# operation from keyboard
+export TURTLEBOT3_MODEL=waffle_pi
+roslaunch turtlebot3_teleop turtlebot3_teleop_key.launch
+
