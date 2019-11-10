@@ -25,12 +25,22 @@ class image_converter:
         #
         # DO SOMETHING
         #
+        cv_image = self.canny_edge(cv_image)
         try:
-            ros_img = self.bridge.cv2_to_imgmsg(cv_image, "bgr8")
+            ros_img = self.bridge.cv2_to_imgmsg(cv_image, "mono8")  # canny: mono8(8UC1)
         except cv_bridge.CvBridgeError as e:
             print(e)
 
         self.image_pub.publish(ros_img)
+        
+    def canny_edge(self, img):
+        """
+        return canny edge image
+        """
+
+        gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+        canny = cv2.Canny(gray, 100, 150)
+        return canny
 
 # Usage:
 # rosrun PACKAGE image_converter.py input:=/camera/image_raw_throttle output:=/test
